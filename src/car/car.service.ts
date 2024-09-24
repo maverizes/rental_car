@@ -18,7 +18,7 @@ export class CarService {
   async findOne(id: number): Promise<Car> {
     const car = await this.carModel.findByPk(id);
     if (!car) {
-      throw new NotFoundException(`Car with ID ${id} not found`);
+      throw new NotFoundException(`Car with ID: ${id} not found`);
     }
     return car;
   }
@@ -30,7 +30,7 @@ export class CarService {
   async update(id: number, updateCarDto: UpdateCarDto): Promise<Car> {
     const [updatedRows] = await this.carModel.update(updateCarDto, { where: { id } });
     if (updatedRows === 0) {
-      throw new NotFoundException(`Car with ID ${id} not found`);
+      throw new NotFoundException(`Car with ID: ${id} not found`);
     }
     return this.findOne(id);
   }
@@ -38,7 +38,7 @@ export class CarService {
   async remove(id: number): Promise<void> {
     const deletedRows = await this.carModel.destroy({ where: { id } });
     if (deletedRows === 0) {
-      throw new NotFoundException(`Car with ID ${id} not found`);
+      throw new NotFoundException(`Car with ID: ${id} not found`);
     }
   }
 }
