@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CarService } from './car.service';
-import { Car } from './car.model';
+import { Car } from './model/car.model';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 
