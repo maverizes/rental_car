@@ -18,6 +18,7 @@ import { CustomerModule } from './customer/customer.module';
         alter: true
       },
       synchronize: true,
+      logging: false
     }),
     CarModule,
     CustomerModule,
