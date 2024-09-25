@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { CarService } from './car.service';
 import { Car } from './model/car.model';
@@ -14,7 +15,7 @@ import { UpdateCarDto } from './dto/update-car.dto';
 
 @Controller('cars')
 export class CarController {
-  constructor(private readonly carService: CarService) { }
+  constructor(private readonly carService: CarService) {}
 
   @Get()
   findAll(): Promise<Car[]> {
@@ -22,8 +23,12 @@ export class CarController {
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: string): Promise<Car> {
-    return this.carService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Car> {
+    const car = await this.carService.findOne(+id);
+    if (!car) {
+      throw new NotFoundException(`Car with ID: ${id} not found`);
+    }
+    return car;
   }
 
   @Post('/add')

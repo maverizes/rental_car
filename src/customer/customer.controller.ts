@@ -1,29 +1,47 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { CustomerService } from './customer.service';
-import { FilterOptionsInterface } from '@utils';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Controller('customers')
 export class CustomerController {
-  constructor(private readonly customerService: CustomerService) {}
+  constructor(private readonly customerService: CustomerService) { }
 
   @Get()
-  findAll(
-    @Query('page') page?: number,
-    @Query('limit') limit?: number,
-    @Query('sort') sort?: string,
-    @Query('sortOrder') sortOrder?: 'ASC' | 'DESC',
-    @Query('fields') fields?: string[],
-    @Query('filters') filters?: Record<string, any>,
+  async findAll(@Query() filterOptions: Record<string, any>) {
+    return await this.customerService.findAll(filterOptions);
+  }
+
+  @Get('/:id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.customerService.findOne(id);
+  }
+
+  @Post("/add")
+  async create(@Body() createCustomerDto: CreateCustomerDto) {
+    return await this.customerService.create(createCustomerDto);
+  }
+
+  @Patch('update/:id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCustomerDto: UpdateCustomerDto,
   ) {
-    const filterOptions: FilterOptionsInterface = {
-      table: 'customers',
-      page: page ?? 1,
-      limit: limit ?? 10,
-      sort: sort ?? 'id',
-      sortOrder: sortOrder ?? 'ASC',
-      fields: fields ?? ['*'],
-      filters: filters ?? {},
-    };
-    return this.customerService.findAll(filterOptions);
+    return await this.customerService.update(id, updateCustomerDto);
+  }
+
+  @Delete('delete/:id')
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.customerService.remove(id);
   }
 }

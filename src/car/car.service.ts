@@ -8,7 +8,7 @@ import { UpdateCarDto } from './dto/update-car.dto';
 export class CarService {
   constructor(
     @InjectModel(Car)
-    private carModel: typeof Car,
+    private readonly carModel: typeof Car,
   ) {}
 
   async findAll(): Promise<Car[]> {
@@ -28,7 +28,9 @@ export class CarService {
   }
 
   async update(id: number, updateCarDto: UpdateCarDto): Promise<Car> {
-    const [updatedRows] = await this.carModel.update(updateCarDto, { where: { id } });
+    const [updatedRows] = await this.carModel.update(updateCarDto, {
+      where: { id },
+    });
     if (updatedRows === 0) {
       throw new NotFoundException(`Car with ID: ${id} not found`);
     }

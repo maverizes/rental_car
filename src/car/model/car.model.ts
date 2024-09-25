@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 
-@Table
+@Table({ tableName: 'cars' })
 export class Car extends Model<Car> {
   @Column({
     type: DataType.STRING,
@@ -18,7 +18,7 @@ export class Car extends Model<Car> {
     type: DataType.STRING,
     allowNull: false,
   })
-  type: string; 
+  type: string;
 
   @Column({
     type: DataType.INTEGER,

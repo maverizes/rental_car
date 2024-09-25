@@ -52,20 +52,22 @@ export class ApiFeature {
 
     return this;
   }
-
   getQuery(): {
     queryString: string;
     limit: number;
     page: number;
   } {
-    const selectedFields = this.#_filterOptions.fields.join(', ');
+    // Ensure that fields is an array, even if it's empty
+    const selectedFields = this.#_filterOptions.fields?.length 
+      ? this.#_filterOptions.fields.join(', ') 
+      : '*';
+  
     const offset = (this.#_filterOptions.page - 1) * this.#_filterOptions.limit;
-
-    let filterQuery: string = Object.entries(this.#_filterOptions.filters)
-      .length
+  
+    let filterQuery: string = Object.entries(this.#_filterOptions.filters).length
       ? ' WHERE '
       : '';
-
+  
     Object.entries(this.#_filterOptions.filters).forEach((fl, i, arr) => {
       if (arr.length - 1 == i) {
         filterQuery += `${fl[0]} ${fl[1]} `;
@@ -73,16 +75,16 @@ export class ApiFeature {
         filterQuery += `${fl[0]} ${fl[1]} AND `;
       }
     });
-
+  
     this.#_queryString = `SELECT ${selectedFields} FROM ${this.#_filterOptions.table} ${filterQuery}
     ORDER BY ${this.#_filterOptions.sort} ${this.#_filterOptions.sortOrder}
     LIMIT ${this.#_filterOptions.limit} 
     OFFSET ${offset};`;
-
+  
     return {
       queryString: this.#_queryString,
       limit: this.#_filterOptions.limit,
       page: this.#_filterOptions.page,
     };
   }
-}
+}  

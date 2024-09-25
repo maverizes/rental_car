@@ -14,8 +14,13 @@ export class CustomerService {
   ) { }
 
   async findAll(filterOptions: Record<string, any>): Promise<Customer[]> {
-    const apiFeature = new ApiFeature('customers')
-      .sort(filterOptions.sort, filterOptions.sortOrder)
+    const apiFeature = new ApiFeature('customers');
+
+    if (filterOptions.sort && filterOptions.sortOrder) {
+      apiFeature.sort(filterOptions.sort, filterOptions.sortOrder);
+    }
+
+    apiFeature
       .paginate(filterOptions.page, filterOptions.limit)
       .limitFields(filterOptions.fields);
 
@@ -30,6 +35,7 @@ export class CustomerService {
 
     return customers as Customer[];
   }
+
 
   async findOne(id: number): Promise<Customer> {
     const customer = await this.customerModel.findByPk(id);

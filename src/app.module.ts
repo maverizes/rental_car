@@ -13,10 +13,14 @@ import { CustomerModule } from './customer/customer.module';
       password: 'gowmysen26',
       database: 'rental_car',
       autoLoadModels: true,
+      sync: {
+        force: true,
+        alter: true
+      },
       synchronize: true,
     }),
     CarModule,
     CustomerModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
